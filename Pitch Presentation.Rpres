@@ -1,0 +1,66 @@
+Pitch Presentation
+========================================================
+author: Laxmi Singh
+date: 9 July 2020
+autosize: true
+
+Analysis of mtcars dataset
+========================================================
+
+Variable and mpg
+
+Reproducible Pitch Presentation
+
+Coursera Reproducible Pitch
+========================================================
+See regression model course project
+URL: 
+
+Find here all the data that has been used for this presentation and also for the first part of project. "First you will create shiny application and deploy it on Rstudio's server. Second, you will use Slidify or Rstudio Presenter to prepare a reproducible pitch presentation about your application.
+
+There is two part of this app one is user interface and the other is server to host it which has been developed using R programming in Rstudio
+
+
+mtcars datasets
+========================================================
+Motor Trend car road test
+Data was extracted from 1974 motor trend US magazine, and comprises fuel consumption and 10 aspects of automobile industry
+```{r, echo=FALSE}
+library(datasets)
+head(mtcars, 3)
+```
+
+Analysis- Main Code
+========================================================
+Code
+
+    formulaTextPoint <- reactive({
+        paste("mpg ~", "as.integer(", input$variable, ")")
+    })
+    
+    fit <- reactive({
+        lm(as.formula(formulaTextPoint()), data=mpgData)
+    })
+    
+    output$caption <- renderText({
+        formulaText()
+    })
+    
+    output$mpgBoxPlot <- renderPlot({
+        boxplot(as.formula(formulaText()), 
+                data = mpgData,
+                outline = input$outliers)
+    })
+    
+    output$fit <- renderPrint({
+        summary(fit())
+    })
+    
+    output$mpgPlot <- renderPlot({
+        with(mpgData, {
+            plot(as.formula(formulaTextPoint()))
+            abline(fit(), col=2)
+        })
+    })
+    
+})
